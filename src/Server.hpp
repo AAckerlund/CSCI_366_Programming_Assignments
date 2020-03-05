@@ -32,70 +32,72 @@
 using namespace std;
 
 
-class ServerException: public exception
+class ServerException : public exception
 {
 private:
-   char *cstr;
+    char *cstr;
 
 public:
-   ServerException(string message){
-      cstr = new char[message.size() + 1];
-      message.copy(cstr, message.size() + 1);
-      cstr[message.size()] = '\0';
-   }
+    ServerException(string message)
+    {
+        cstr = new char[message.size() + 1];
+        message.copy(cstr, message.size() + 1);
+        cstr[message.size()] = '\0';
+    }
 
-   ~ServerException(){
-      delete cstr;
-   }
+    ~ServerException()
+    {
+        delete cstr;
+    }
 
-   virtual const char* what() const throw(){
-      return cstr;
-   }
+    virtual const char *what() const throw()
+    {
+        return cstr;
+    }
 };
 
-class Server{
+class Server
+{
 public:
-   int board_size;
+    int board_size;
 
 private:
-   ifstream p1_setup_board;
-   ifstream p2_setup_board;
+    ifstream p1_setup_board;
+    ifstream p2_setup_board;
 
 public:
-   /**
-    * Performs Server initialization
-    *
-    * Need to do initialization outside of the constructor, so that the object may be initialized inside the
-    * googletest SetUp() method.
-    * The method opens player setup boards containing ship positions and checks the size of boards compared to
-    * board_size parameter.
-    * @param board_size - the size of a square board
-    * @param p1_setup_board - file name of player 1's board
-    * @param p2_setup_board - file name of player 2's board
-    */
-   void initialize(unsigned int board_size,
-                   string p1_setup_board,
-                   string p2_setup_board);
+    /**
+     * Performs Server initialization
+     *
+     * Need to do initialization outside of the constructor, so that the object may be initialized inside the
+     * googletest SetUp() method.
+     * The method opens player setup boards containing ship positions and checks the size of boards compared to
+     * board_size parameter.
+     * @param board_size - the size of a square board
+     * @param p1_setup_board - file name of player 1's board
+     * @param p2_setup_board - file name of player 2's board
+     */
+    void initialize(unsigned int board_size, string p1_setup_board, string p2_setup_board);
 
-   /**
-    * Checks the coordinates of a shot against setup board of player
-    *
-    * Check that player number within bounds, checks that shot coordinates within bounds, determines if the shot
-    * results in a HIT, or a MISS.
-    * @param player - player number
-    * @param x - coordinate
-    * @param y - coordinate
-    * @return returns shot result as either HIT, MISS, or OUT_OF_BOUNDS
-    */
-   int evaluate_shot(unsigned int player, unsigned int x, unsigned int y);
+    /**
+     * Checks the coordinates of a shot against setup board of player
+     *
+     * Check that player number within bounds, checks that shot coordinates within bounds, determines if the shot
+     * results in a HIT, or a MISS.
+     * @param player - player number
+     * @param x - coordinate
+     * @param y - coordinate
+     * @return returns shot result as either HIT, MISS, or OUT_OF_BOUNDS
+     */
+    int evaluate_shot(unsigned int player, unsigned int x, unsigned int y);
 
-   /**
-    * Processes a shot issued by player
-    *
-    * Gets the shot from player, extracts coordinates, passes the information of evaluate_shot, and writes the result
-    * into player_#.result.json.
-    * @param player - player number
-    * @return returns SHOT_PROCESSED, or NO_SHOT_FILE if nothing to process
-    */
-   int process_shot(unsigned int player);
+    /**
+     * Processes a shot issued by player
+     *
+     * Gets the shot from player, extracts coordinates, passes the information of evaluate_shot, and writes the result
+     * into player_#.result.json.
+     * @param player - player number
+     * @return returns SHOT_PROCESSED, or NO_SHOT_FILE if nothing to process
+     */
+    int process_shot(unsigned int player);
 };

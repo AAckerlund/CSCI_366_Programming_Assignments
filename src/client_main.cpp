@@ -28,12 +28,15 @@ int main()
     // initialize the client with a correct player number
     Client c;
     while(! c.initialized){
-        try{
+        try
+        {
             cout << "Enter player number: ";
             int player;
             cin >> player;
             c.initialize(player, BOARD_SIZE);
-        } catch (ClientWrongPlayerNumberException& e){
+        }
+        catch (ClientWrongPlayerNumberException& e)
+        {
             cout << e.what() << '\n';
         }
 
@@ -41,7 +44,8 @@ int main()
 
     // keep firing and updating the action board with results from the server
     unsigned int x, y;
-    while(true){
+    int num = 1;
+    while(num == 1){
         // get coordinates
         cout << "Enter fire x position: ";
         cin >> x;

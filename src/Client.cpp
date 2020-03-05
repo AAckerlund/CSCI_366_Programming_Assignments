@@ -17,30 +17,65 @@
 #include "common.hpp"
 #include "Client.hpp"
 
-Client::~Client() {
+Client::~Client()
+{
 }
 
 
-void Client::initialize(unsigned int player, unsigned int board_size){
+void Client::initialize(unsigned int player, unsigned int board_size)
+{
+	this->board_size = board_size;
+	this->player = player;
+	string fileName = "player_" + to_string(player) + ".action_board.json";
+	ofstream file;
+	file.open(fileName, ios::trunc | ios::out);
+	file << "{\n"
+			"    \"board\": [\n"
+			"        [\n"
+			"            0,\n"
+			"            0\n"
+			"        ],\n"
+			"        [\n"
+			"            0,\n"
+			"            0\n"
+			"        ]\n"
+			"    ]\n"
+			"}";
+	file.close();
+	initialized = true;
 }
 
 
-void Client::fire(unsigned int x, unsigned int y) {
+void Client::fire(unsigned int x, unsigned int y)
+{
+	if(x >= 0 && x < board_size && y >= 0 && y < board_size)
+	{
+		string fileName = "player_" + to_string(player) + ".shot.json";
+		fstream file;
+		file.open(fileName, ios::trunc | ios::out);
+		file << "{\n"
+				"    \"x\": " + to_string(x) + ",\n"
+				"    \"y\": " + to_string(y) + "\n"
+				"}";
+	}
 }
 
 
-bool Client::result_available() {
+bool Client::result_available()
+{
 }
 
 
-int Client::get_result() {
+int Client::get_result()
+{
 }
 
 
-
-void Client::update_action_board(int result, unsigned int x, unsigned int y) {
+void Client::update_action_board(int result, unsigned int x, unsigned int y)
+{
 }
 
 
-string Client::render_action_board(){
+string Client::render_action_board()
+{
 }

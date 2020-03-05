@@ -21,24 +21,28 @@
 #include <thread>
 
 
-int main(){
-    cout << "Starting Battleship server" << endl;
+int main()
+{
+	cout << "Starting Battleship server" << endl;
 
-    Server s;
-    s.initialize(BOARD_SIZE, "player_1.setup_board.txt", "player_2.setup_board.txt");
+	Server s;
+	s.initialize(BOARD_SIZE, "player_1.setup_board.txt", "player_2.setup_board.txt");
 
-    // run the server process in a loop
-    while(true){
-        while(s.process_shot(1) == NO_SHOT_FILE) {
-            cout << "Waiting for shot from player 1" << endl;
-            this_thread::sleep_for(std::chrono::milliseconds(2000));
-        }
-        cout << "Processed shot from player 1" << endl;
-        while(s.process_shot(2) == NO_SHOT_FILE) {
-            cout << "Waiting for shot from player 2" << endl;
-            this_thread::sleep_for(std::chrono::milliseconds(2000));
-        }
-        cout << "Processed shot from player 2" << endl;
-    }
-
+	// run the server process in a loop
+	int num = 1;
+	while(num == 1)
+	{
+		while(s.process_shot(1) == NO_SHOT_FILE)
+		{
+			cout << "Waiting for shot from player 1" << endl;
+			this_thread::sleep_for(std::chrono::milliseconds(2000));//sleep for 2 seconds
+		}
+		cout << "Processed shot from player 1" << endl;
+		while(s.process_shot(2) == NO_SHOT_FILE)
+		{
+			cout << "Waiting for shot from player 2" << endl;
+			this_thread::sleep_for(std::chrono::milliseconds(2000));//sleep for 2 seconds
+		}
+		cout << "Processed shot from player 2" << endl;
+	}
 }

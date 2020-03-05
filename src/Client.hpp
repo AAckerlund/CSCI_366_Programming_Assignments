@@ -21,35 +21,41 @@
 
 using namespace std;
 
-class ClientWrongPlayerNumberException: public exception{
+class ClientWrongPlayerNumberException : public exception
+{
 public:
-    virtual const char* what() const throw(){
+    virtual const char *what() const throw()
+    {
         return "Player number our of bounds.";
     }
 };
 
-class ClientException: public exception
+class ClientException : public exception
 {
 private:
     char *cstr;
 
 public:
-    ClientException(string message){
+    ClientException(string message)
+    {
         cstr = new char[message.size() + 1];
         message.copy(cstr, message.size() + 1);
         cstr[message.size()] = '\0';
     }
 
-    ~ClientException(){
+    ~ClientException()
+    {
         delete cstr;
     }
 
-    virtual const char* what() const throw(){
+    virtual const char *what() const throw()
+    {
         return cstr;
     }
 };
 
-class Client {
+class Client
+{
 private:
     unsigned int player;
     string board_name;
