@@ -153,6 +153,16 @@ int Server::process_shot(unsigned int player)//using the player number, looks fo
 	file.open(filePath);
 	if(!file) //file not opened for whatever reason.
 		return NO_SHOT_FILE;
+
+	vector<vector<int>> board(board_size, vector<int> (board_size));
+
+
+	cereal::JSONInputArchive archive(file);
+	archive(board);
+
+//	board[2][3] = 7; how to access a value
+	file.close();
+
 	//need to actually get the values from the file.
 	//evaluate_shot(player, 1,1);
     return SHOT_FILE_PROCESSED;

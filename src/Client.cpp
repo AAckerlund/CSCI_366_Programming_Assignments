@@ -45,36 +45,13 @@ void Client::initialize(unsigned int player, unsigned int board_size)
 	this->player = player;
 	string fileName = "player_" + to_string(player) + ".action_board.json";
 
+	vector<vector<int>> board(board_size, vector<int> (board_size, 0));
 
-	int board[board_size];
-	for(int i = 0; i < board_size; i++)
-		for(int j = 0; j < board_size; j++)
-		{
-			board[i] = 0;
-		}
+	ofstream file (fileName);
 
-	cereal::JSONOutputArchive archive(std::cout);
+	cereal::JSONOutputArchive archive(file);
+	archive(CEREAL_NVP(board));
 
-
-
-//	archive(board);
-
-	ofstream file;
-	file.open(fileName, ios::trunc | ios::out);
-
-	file << "{\n"
-			"    \"board\": [\n"
-			"        [\n"
-			"            0,\n"
-			"            0\n"
-			"        ],\n"
-			"        [\n"
-			"            0,\n"
-			"            0\n"
-			"        ]\n"
-			"    ]\n"
-			"}";
-	file.close();
 	initialized = true;
 }
 
