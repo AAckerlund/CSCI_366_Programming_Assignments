@@ -22,13 +22,46 @@ Client::~Client()
 }
 
 
+/*struct Cereal
+{
+	int arr[][];
+
+	// This method lets cereal know which data members to serialize
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(arr); // serialize things by passing them to the archive
+	}
+};*/
+
 void Client::initialize(unsigned int player, unsigned int board_size)
 {
+/*
+	cereal::JSONOutputArchive archive( std::cout );
+	int arr[board_size][board_size];
+	archive(arr);
+*/
 	this->board_size = board_size;
 	this->player = player;
 	string fileName = "player_" + to_string(player) + ".action_board.json";
+
+
+	int board[board_size];
+	for(int i = 0; i < board_size; i++)
+		for(int j = 0; j < board_size; j++)
+		{
+			board[i] = 0;
+		}
+
+	cereal::JSONOutputArchive archive(std::cout);
+
+
+
+//	archive(board);
+
 	ofstream file;
 	file.open(fileName, ios::trunc | ios::out);
+
 	file << "{\n"
 			"    \"board\": [\n"
 			"        [\n"
