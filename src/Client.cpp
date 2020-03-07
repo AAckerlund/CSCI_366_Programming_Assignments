@@ -36,11 +36,6 @@ Client::~Client()
 
 void Client::initialize(unsigned int player, unsigned int board_size)
 {
-/*
-	cereal::JSONOutputArchive archive( std::cout );
-	int arr[board_size][board_size];
-	archive(arr);
-*/
 	this->board_size = board_size;
 	this->player = player;
 	string fileName = "player_" + to_string(player) + ".action_board.json";
@@ -70,19 +65,86 @@ void Client::fire(unsigned int x, unsigned int y)
 	}
 }
 
-
-bool Client::result_available()
+/**
+	* Checks if a result file is available for
+	* @return true if result is available, false otherwise
+	*/
+bool Client::result_available()//TODO: Not working
 {
+	/*Leaving this function empty passes more tests than putting code in it.*/
+	int opponent;
+	if(player == 1)
+		opponent = 2;
+	else
+		opponent = 1;
+
+	string fileName = "player_" + to_string(opponent) + ".result.json";
+	ofstream file;
+	file.open(fileName);
+	return !!file;
 }
 
 
-int Client::get_result()
+/**
+ * Gets the result from the player_#.result.json
+ * @return the result as either HIT, MISS, or OUT_OF_BOUNDS
+ */
+int Client::get_result()//TODO: Not working
 {
+	if(result_available())
+	{
+		vector<int> result(1);
+		int opponent;
+		if(player == 1)
+			opponent = 2;
+		else
+			opponent = 1;
+
+		string fileName = "player_" + to_string(opponent) + ".result.json";
+		ifstream file;
+		file.open(fileName);
+
+		cereal::JSONInputArchive archive(file);
+		archive(result);
+		//write to the file
+		fileName = "player_" + to_string(player) + ".result.json";
+
+		ofstream out (fileName);
+		cereal::JSONOutputArchive ar(out);
+		ar(CEREAL_NVP(result[0]));
+		out.close();
+		file.close();
+//		cout << result[0] << " woeifhowie fwhr goilwi ufibgibw flibrvibrgibribirb arblieriua eilf ibviuaburvbifiiueriharlaergilh" << endl;
+		//hit = 1, miss = -1
+		if(result[0] == 1)
+			return HIT;
+		return MISS;
+	}
 }
 
 
 void Client::update_action_board(int result, unsigned int x, unsigned int y)
 {
+	vector<vector<int>> board(board_size, vector<int> (board_size, 0));
+
+	string fileName = "player_" + to_string(player) + ".action_board.json";
+	ifstream file;
+	file.open(fileName);
+
+	cereal::JSONInputArchive archive(file);
+	archive(board);
+	file.close();
+
+	if(result == HIT)
+		board[x][y] = HIT;
+	else
+		board[x][y] = MISS;
+
+	ofstream out (fileName);
+
+	cereal::JSONOutputArchive ar(out);
+	ar(CEREAL_NVP(board));
+
 }
 
 

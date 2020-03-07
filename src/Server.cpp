@@ -95,7 +95,7 @@ void Server::initialize(unsigned int board_size, string p1_setup_board, string p
 }
 
 
-int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)
+int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)//TODO: not finished
 {
 	/*
 	Checks the coordinates of a shot against setup board of player
@@ -135,7 +135,7 @@ int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)
 }
 
 
-int Server::process_shot(unsigned int player)//using the player number, looks for a file created by them. Reads in the x and y guess from that file and then passes them to evaluate_shot
+int Server::process_shot(unsigned int player)//TODO: using the player number, looks for a file created by them. Reads in the x and y guess from that file and then passes them to evaluate_shot
 {
 	/*
 	Processes a shot issued by player
@@ -154,13 +154,13 @@ int Server::process_shot(unsigned int player)//using the player number, looks fo
 	if(!file) //file not opened for whatever reason.
 		return NO_SHOT_FILE;
 
-	vector<vector<int>> board(board_size, vector<int> (board_size));
+/*	vector<vector<int>> board(board_size, vector<int> (board_size));
 
 
 	cereal::JSONInputArchive archive(file);
 	archive(board);
 
-//	board[2][3] = 7; how to access a value
+	board[2][3] = 7;// how to access a value*/
 	file.close();
 
 	//need to actually get the values from the file.
