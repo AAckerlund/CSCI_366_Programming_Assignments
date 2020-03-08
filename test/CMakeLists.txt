@@ -36,6 +36,7 @@ execute_process(COMMAND dos2unix ${PROJECT_SOURCE_DIR}/cmake-build-debug/test/co
 execute_process(COMMAND dos2unix ${PROJECT_SOURCE_DIR}/cmake-build-debug/test/correct_miss_result.json)
 execute_process(COMMAND dos2unix ${PROJECT_SOURCE_DIR}/cmake-build-debug/test/correct_out_of_bounds_result.json)
 
+
 add_executable(battleship_tests tests.cpp)
 include_directories(${PROJECT_SOURCE_DIR}/dtl/dtl ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/cereal/include)
 target_link_libraries(battleship_tests SERVER CLIENT gtest gmock_main)

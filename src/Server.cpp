@@ -14,6 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
 #include "common.hpp"
 #include "Server.hpp"
 
@@ -25,6 +26,7 @@ void Server::initialize(unsigned int board_size, string p1_setup_board, string p
 {
 	ifstream file;
 	this->board_size = board_size;
+
 	//opens and reads in data from the given file
 	file.open(p1_setup_board);
 	if(!file)//file was not opened for whatever reason
@@ -74,10 +76,12 @@ void Server::initialize(unsigned int board_size, string p1_setup_board, string p
 		throw ServerException("Player 2 setup board contains an invalid number of lines. Program Terminating.");
 	}
 	file.close();
+
 }
 
-int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)//TODO: not finished
+int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)
 {
+
 	//make sure values are correct
 	if(player > MAX_PLAYERS)//Player number is too high
 		throw ServerException("Player Number too high. Program Terminating.");
@@ -86,17 +90,19 @@ int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)//
 	if(x < 0 || x > board_size || y < 0 || y > board_size)//one of the coordinates is outside the range of the board.
 		return OUT_OF_BOUNDS;
 
+
 	//flip to the opponents player number
 	if(player == 1)
 		player = 2;
 	else
 		player = 1;
-
+  
 	string filePath = "player_" + to_string(player) + ".setup_board.txt";
 	ifstream file;
 	file.open(filePath);
 	if(!file) //file not opened for whatever reason.
 		return NO_SHOT_FILE;
+  
 	string board[board_size];
 	string line;
 	int i = 0;
@@ -116,6 +122,7 @@ int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y)//
 
 int Server::process_shot(unsigned int player)
 {
+
 	if(player > MAX_PLAYERS)//Player number is too high
 		throw ServerException("Player Number too high. Program Terminating.");
 	if(player <= 0)//Player number is too low
@@ -125,6 +132,7 @@ int Server::process_shot(unsigned int player)
 	ifstream file;
 	file.open(filePath);
 	if(!file) //file not opened for whatever reason.
+
 	{
 		return NO_SHOT_FILE;
 	}
