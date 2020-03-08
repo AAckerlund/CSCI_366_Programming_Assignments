@@ -21,19 +21,6 @@ Client::~Client()
 {
 }
 
-
-/*struct Cereal
-{
-	int arr[][];
-
-	// This method lets cereal know which data members to serialize
-	template<class Archive>
-	void serialize(Archive & archive)
-	{
-		archive(arr); // serialize things by passing them to the archive
-	}
-};*/
-
 void Client::initialize(unsigned int player, unsigned int board_size)
 {
 	this->board_size = board_size;
@@ -50,78 +37,64 @@ void Client::initialize(unsigned int player, unsigned int board_size)
 	initialized = true;
 }
 
-
 void Client::fire(unsigned int x, unsigned int y)
 {
 	if(x >= 0 && x < board_size && y >= 0 && y < board_size)
 	{
 		string fileName = "player_" + to_string(player) + ".shot.json";
-		fstream file;
-		file.open(fileName, ios::trunc | ios::out);
-		file << "{\n"
-				"    \"x\": " + to_string(x) + ",\n"
-				"    \"y\": " + to_string(y) + "\n"
-				"}";
+		ofstream file (fileName);
+
+		cereal::JSONOutputArchive archive(file);
+		archive(CEREAL_NVP(x),CEREAL_NVP(y));
 	}
 }
 
-/**
-	* Checks if a result file is available for
-	* @return true if result is available, false otherwise
-	*/
-bool Client::result_available()//TODO: Not working
+bool Client::result_available()
 {
-	/*Leaving this function empty passes more tests than putting code in it.*/
-	int opponent;
-	if(player == 1)
-		opponent = 2;
-	else
-		opponent = 1;
-
-	string fileName = "player_" + to_string(opponent) + ".result.json";
-	ofstream file;
-	file.open(fileName);
-	return !!file;
+	string fileName = "player_" + to_string(player) + ".result.json";
+	ifstream file (fileName);
+	if(!file)
+		return false;
+	return true;
 }
 
-
-/**
- * Gets the result from the player_#.result.json
- * @return the result as either HIT, MISS, or OUT_OF_BOUNDS
- */
-int Client::get_result()//TODO: Not working
+int Client::get_result()
 {
-	if(result_available())
+	int result;
+
+	string fileName = "player_" + to_string(player) + ".result.json";
+	ifstream file(fileName);
+	if(!file)
 	{
-		vector<int> result(1);
-		int opponent;
-		if(player == 1)
-			opponent = 2;
-		else
-			opponent = 1;
+		throw ClientException("File does not exist. Program Terminating.");
+	}
+	cereal::JSONInputArchive archive(file);
+	archive(result);
+	file.close();
 
-		string fileName = "player_" + to_string(opponent) + ".result.json";
-		ifstream file;
-		file.open(fileName);
+	//write to the file
+	fileName = "player_" + to_string(player) + ".result.json";
 
-		cereal::JSONInputArchive archive(file);
-		archive(result);
-		//write to the file
-		fileName = "player_" + to_string(player) + ".result.json";
-
-		ofstream out (fileName);
-		cereal::JSONOutputArchive ar(out);
-		ar(CEREAL_NVP(result[0]));
-		out.close();
-		file.close();
-//		cout << result[0] << " woeifhowie fwhr goilwi ufibgibw flibrvibrgibribirb arblieriua eilf ibviuaburvbifiiueriharlaergilh" << endl;
-		//hit = 1, miss = -1
-		if(result[0] == 1)
-			return HIT;
+	ofstream out(fileName);
+	cereal::JSONOutputArchive ar(out);
+	ar(CEREAL_NVP(result));
+	out.close();
+	remove(fileName.c_str());//deletes the result file so that the sever doesn't continue to read it.
+	//hit = 1, miss = -1, oob = 0
+	if(result == 1)
+	{
+		return HIT;
+	}
+	else if(result == 0)
+	{
+		return OUT_OF_BOUNDS;
+	}
+	else if(result == -1)
+	{
 		return MISS;
 	}
+	throw ClientException("Bad result value. Program Terminating.");
 }
-
 
 void Client::update_action_board(int result, unsigned int x, unsigned int y)
 {
@@ -147,7 +120,24 @@ void Client::update_action_board(int result, unsigned int x, unsigned int y)
 
 }
 
-
 string Client::render_action_board()
 {
+	vector<vector<int>> board(board_size, vector<int>(board_size, 0));
+
+	string fileName = "player_" + to_string(player) + ".action_board.json";
+	ifstream file;
+	file.open(fileName);
+
+	cereal::JSONInputArchive archive(file);
+	archive(board);
+	file.close();
+	for(int i = 0; i < board_size; i++)
+	{
+		for(int j = 0; j < board_size; j++)
+		{
+			cout << board[i][j] << " ";
+		}
+		cout << endl;
+	}
+	return "done";
 }
