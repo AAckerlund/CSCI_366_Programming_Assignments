@@ -132,7 +132,6 @@ int Server::process_shot(unsigned int player)
 	ifstream file;
 	file.open(filePath);
 	if(!file) //file not opened for whatever reason.
-
 	{
 		return NO_SHOT_FILE;
 	}

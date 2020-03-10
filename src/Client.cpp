@@ -73,13 +73,6 @@ int Client::get_result()
 	archive(result);
 	file.close();
 
-	//write to the file
-	fileName = "player_" + to_string(player) + ".result.json";
-
-	ofstream out(fileName);
-	cereal::JSONOutputArchive ar(out);
-	ar(CEREAL_NVP(result));
-	out.close();
 	remove(fileName.c_str());//deletes the result file so that the sever doesn't continue to read it.
 	//hit = 1, miss = -1, oob = 0
 	if(result == 1)
