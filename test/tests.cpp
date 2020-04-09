@@ -35,6 +35,8 @@
  * @return distance between the contents of two files
  */
 #include <dtl.hpp> // a library for diffing strings
+#include <BitArray2D.hpp>
+
 long get_diff_dist(string file1, string file2){
    // load the file contents
    ifstream ifstr1(file1);
