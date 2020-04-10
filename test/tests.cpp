@@ -15,12 +15,9 @@
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "gtest/gtest.h"
-#include "gmock/gmock.h"
 
 
 #include <string>
-#include <fstream>
-#include <streambuf>
 
 #include "common.hpp"
 #include "Server.hpp"
