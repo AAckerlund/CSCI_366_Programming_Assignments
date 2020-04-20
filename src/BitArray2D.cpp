@@ -22,13 +22,14 @@ BitArray2D::BitArray2D(unsigned int rows, unsigned int columns) {
 		throw BitArray2DException("error");
 	this->rows = rows;
 	this->columns = columns;
-}
 
+	int numBits = ceil(((double)rows * columns)/8);
+	this->array = (char*) calloc(numBits, sizeof(char));
+}
 
 BitArray2D::~BitArray2D() {
 
 }
-
 
 bool BitArray2D::get(unsigned int row, unsigned int column){
 	// check array bounds
@@ -37,8 +38,6 @@ bool BitArray2D::get(unsigned int row, unsigned int column){
 	// get the element
 	return get_bit_elem(array, columns, row, column);
 }
-
-
 
 void BitArray2D::set(unsigned int row, unsigned int column){
 	// check array bounds
